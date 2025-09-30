@@ -134,3 +134,8 @@ API base URL:
 * **SQLite**: chosen for easy setup (no MySQL/Postgres required).
 
 ---
+## 📑 Documentation
+
+- [Architecture Note](./ARCHITECTURE_NOTE.md)
+- [Postman Collection](./docs/projitt-collection.json)
+- [Postman Environment](./docs/projitt-env.json)
