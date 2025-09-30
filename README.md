@@ -45,6 +45,12 @@ Copy `.env.example` to `.env`:
 cp .env.example .env
 ```
 
+Generate app key (this writes `APP_KEY` into `.env`)
+
+```bash
+php artisan key:generate
+```
+
 Already set in `.env`:
 
 ```env
