@@ -1,0 +1,351 @@
+{
+    "info": {
+        "name": "Projitt Backend API",
+        "_postman_id": "projitt-backend-collection-1",
+        "description": "Postman collection for Projitt video conferencing backend.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{token}}",
+                "type": "string"
+            }
+        ]
+    },
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Register",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@example.com\",\n  \"password\": \"password\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/auth/register",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["auth", "register"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "let data = pm.response.json();",
+                                    "if (data.access_token) pm.environment.set('token', data.access_token);",
+                                    "if (data.token_type) pm.environment.set('token_type', data.token_type);"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/auth/login",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["auth", "login"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "let data = pm.response.json();",
+                                    "if (data.access_token) pm.environment.set('token', data.access_token);",
+                                    "if (data.token_type) pm.environment.set('token_type', data.token_type);"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Refresh",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/auth/refresh"
+                    }
+                },
+                {
+                    "name": "Me",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/auth/me"
+                    }
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/auth/logout"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Meetings",
+            "item": [
+                {
+                    "name": "List",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/meetings"
+                    }
+                },
+                {
+                    "name": "Create",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"Demo Meeting\",\n  \"scheduled_at\": \"2025-10-01T10:00:00\",\n  \"duration_minutes\": 60\n}"
+                        },
+                        "url": "{{baseUrl}}/meetings"
+                    }
+                },
+                {
+                    "name": "Show",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/meetings/1"
+                    }
+                },
+                {
+                    "name": "Update",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"Updated Title\"\n}"
+                        },
+                        "url": "{{baseUrl}}/meetings/1"
+                    }
+                },
+                {
+                    "name": "Start",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/meetings/1/start"
+                    }
+                },
+                {
+                    "name": "End",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/meetings/1/end"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Invitations",
+            "item": [
+                {
+                    "name": "Invite",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"invitee_email\": \"friend@example.com\"\n}"
+                        },
+                        "url": "{{baseUrl}}/meetings/1/invite"
+                    }
+                },
+                {
+                    "name": "Accept",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/invitations/1/accept"
+                    }
+                },
+                {
+                    "name": "Reject",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/invitations/1/reject"
+                    }
+                },
+                {
+                    "name": "Propose",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"proposed_time\": \"2025-10-02T11:00:00\"\n}"
+                        },
+                        "url": "{{baseUrl}}/invitations/1/propose"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Recordings",
+            "item": [
+                {
+                    "name": "List",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/meetings/1/recordings"
+                    }
+                },
+                {
+                    "name": "Start",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/meetings/1/recordings/start"
+                    }
+                },
+                {
+                    "name": "End",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/meetings/1/recordings/end"
+                    }
+                },
+                {
+                    "name": "Download",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/recordings/1/download"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "AI Notes",
+            "item": [
+                {
+                    "name": "Generate Notes",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/meetings/1/notes"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Presence",
+            "item": [
+                {
+                    "name": "Join",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/meetings/1/presence/join"
+                    }
+                },
+                {
+                    "name": "Leave",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/meetings/1/presence/leave"
+                    }
+                },
+                {
+                    "name": "Participants",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/meetings/1/participants"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "RTC Signaling",
+            "item": [
+                {
+                    "name": "Send Signal",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"to_user_id\": 2,\n  \"type\": \"offer\",\n  \"payload\": {\"sdp\": \"mock_sdp_here\"}\n}"
+                        },
+                        "url": "{{baseUrl}}/meetings/1/rtc/send"
+                    }
+                },
+                {
+                    "name": "Inbox",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/meetings/1/rtc/inbox"
+                    }
+                },
+                {
+                    "name": "Acknowledge",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"ids\": [1]\n}"
+                        },
+                        "url": "{{baseUrl}}/meetings/1/rtc/ack"
+                    }
+                }
+            ]
+        }
+    ]
+}

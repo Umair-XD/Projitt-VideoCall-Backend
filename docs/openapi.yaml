@@ -1,0 +1,249 @@
+openapi: 3.0.3
+info:
+  title: Projitt Video Backend API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+paths:
+  /api/auth/register:
+    post:
+      summary: Register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                email: { type: string, format: email }
+                password: { type: string }
+      responses: { '201': { description: Created } }
+  /api/auth/login:
+    post:
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses: { '200': { description: OK } }
+  /api/meetings:
+    get:
+      summary: List meetings
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: query
+          name: per_page
+          schema: { type: integer, minimum: 1, maximum: 100 }
+        - in: query
+          name: sort_by
+          schema: { type: string, enum: [scheduled_at, created_at, title, status] }
+        - in: query
+          name: sort_dir
+          schema: { type: string, enum: [asc, desc] }
+      responses: { '200': { description: OK } }
+    post:
+      summary: Create meeting
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, scheduled_at, duration_minutes]
+              properties:
+                title: { type: string }
+                scheduled_at: { type: string, format: date-time }
+                duration_minutes: { type: integer, minimum: 1 }
+      responses: { '201': { description: Created } }
+  /api/meetings/{meeting}:
+    get:
+      summary: Get meeting
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: meeting
+          required: true
+          schema: { type: integer }
+      responses: { '200': { description: OK } }
+    put:
+      summary: Update meeting
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: meeting
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: { type: string }
+                scheduled_at: { type: string, format: date-time }
+                duration_minutes: { type: integer, minimum: 1 }
+      responses: { '200': { description: OK } }
+  /api/meetings/{meeting}/start:
+    post:
+      summary: Start meeting
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: meeting
+          required: true
+          schema: { type: integer }
+      responses: { '200': { description: OK } }
+  /api/meetings/{meeting}/end:
+    post:
+      summary: End meeting
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: meeting
+          required: true
+          schema: { type: integer }
+      responses: { '200': { description: OK } }
+  /api/meetings/{meeting}/invite:
+    post:
+      summary: Invite participant
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: meeting
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                invitee_user_id: { type: integer }
+                invitee_email: { type: string, format: email }
+      responses: { '201': { description: Created } }
+  /api/invitations/{invitation}/accept:
+    post:
+      summary: Accept invitation
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: invitation
+          required: true
+          schema: { type: integer }
+      responses: { '200': { description: OK } }
+  /api/invitations/{invitation}/reject:
+    post:
+      summary: Reject invitation
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: invitation
+          required: true
+          schema: { type: integer }
+      responses: { '200': { description: OK } }
+  /api/invitations/{invitation}/propose:
+    post:
+      summary: Propose new time
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: invitation
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [proposed_time]
+              properties:
+                proposed_time: { type: string, format: date-time }
+      responses: { '200': { description: OK } }
+  /api/meetings/{meeting}/recordings:
+    get:
+      summary: List recordings
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: meeting
+          required: true
+          schema: { type: integer }
+        - in: query
+          name: per_page
+          schema: { type: integer, minimum: 1, maximum: 100 }
+        - in: query
+          name: sort_by
+          schema: { type: string, enum: [created_at, started_at, ended_at] }
+        - in: query
+          name: sort_dir
+          schema: { type: string, enum: [asc, desc] }
+      responses: { '200': { description: OK } }
+  /api/meetings/{meeting}/participants:
+    get:
+      summary: List participants
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: meeting
+          required: true
+          schema: { type: integer }
+        - in: query
+          name: active
+          schema: { type: boolean }
+      responses: { '200': { description: OK } }
+  /api/meetings/{meeting}/recordings/start:
+    post:
+      summary: Start recording (mock)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: meeting
+          required: true
+          schema: { type: integer }
+      responses: { '201': { description: Created } }
+  /api/meetings/{meeting}/recordings/end:
+    post:
+      summary: End recording (mock)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: meeting
+          required: true
+          schema: { type: integer }
+      responses: { '200': { description: OK } }
+  /api/recordings/{recording}/download:
+    get:
+      summary: Download recording (mock)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: recording
+          required: true
+          schema: { type: integer }
+      responses: { '200': { description: OK } }
+  /api/meetings/{meeting}/notes:
+    post:
+      summary: Generate AI notes (mock)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: meeting
+          required: true
+          schema: { type: integer }
+      responses: { '201': { description: Created } }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

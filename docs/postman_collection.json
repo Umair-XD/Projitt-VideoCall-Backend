@@ -1,0 +1,174 @@
+{
+  "info": {
+    "name": "Projitt Video Backend API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection for JWT auth, meetings, invitations, recordings (mock), and AI notes (mock)."
+  },
+  "item": [
+    {
+      "name": "Auth - Register",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "url": {"raw": "{{baseUrl}}/api/auth/register", "host": ["{{baseUrl}}"], "path": ["api","auth","register"]},
+        "body": {"mode": "raw", "raw": "{\n  \"name\": \"Test\",\n  \"email\": \"test@example.com\",\n  \"password\": \"secret123\"\n}"}
+      }
+    },
+    {
+      "name": "Auth - Login",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "url": {"raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api","auth","login"]},
+        "body": {"mode": "raw", "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"secret123\"\n}"}
+      }
+    },
+    {
+      "name": "Meetings - Create",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"},
+          {"key": "Authorization", "value": "Bearer {{token}}"}
+        ],
+        "url": {"raw": "{{baseUrl}}/api/meetings", "host": ["{{baseUrl}}"], "path": ["api","meetings"]},
+        "body": {"mode": "raw", "raw": "{\n  \"title\": \"Project Sync\",\n  \"scheduled_at\": \"2025-09-30 12:00:00\",\n  \"duration_minutes\": 30\n}"}
+      }
+    },
+    {
+      "name": "Meetings - Update",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"},
+          {"key": "Authorization", "value": "Bearer {{token}}"}
+        ],
+        "url": {"raw": "{{baseUrl}}/api/meetings/{{meetingId}}", "host": ["{{baseUrl}}"], "path": ["api","meetings","{{meetingId}}"]},
+        "body": {"mode": "raw", "raw": "{\n  \"title\": \"Project Sync - Updated\",\n  \"duration_minutes\": 45\n}"}
+      }
+    },
+    {
+      "name": "Meetings - List",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {"raw": "{{baseUrl}}/api/meetings?per_page=10&sort_by=scheduled_at&sort_dir=desc", "host": ["{{baseUrl}}"], "path": ["api","meetings"], "query": [
+          {"key": "per_page", "value": "10"},
+          {"key": "sort_by", "value": "scheduled_at"},
+          {"key": "sort_dir", "value": "desc"}
+        ]}
+      }
+    },
+    {
+      "name": "Invitations - Invite",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"},
+          {"key": "Authorization", "value": "Bearer {{token}}"}
+        ],
+        "url": {"raw": "{{baseUrl}}/api/meetings/{{meetingId}}/invite", "host": ["{{baseUrl}}"], "path": ["api","meetings","{{meetingId}}","invite"]},
+        "body": {"mode": "raw", "raw": "{\n  \"invitee_email\": \"guest@example.com\"\n}"}
+      }
+    },
+    {
+      "name": "Recordings - Start",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {"raw": "{{baseUrl}}/api/meetings/{{meetingId}}/recordings/start", "host": ["{{baseUrl}}"], "path": ["api","meetings","{{meetingId}}","recordings","start"]}
+      }
+    },
+    {
+      "name": "Recordings - End",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {"raw": "{{baseUrl}}/api/meetings/{{meetingId}}/recordings/end", "host": ["{{baseUrl}}"], "path": ["api","meetings","{{meetingId}}","recordings","end"]}
+      }
+    },
+    {
+      "name": "Recordings - List",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {"raw": "{{baseUrl}}/api/meetings/{{meetingId}}/recordings?per_page=10&sort_by=created_at&sort_dir=desc", "host": ["{{baseUrl}}"], "path": ["api","meetings","{{meetingId}}","recordings"], "query": [
+          {"key": "per_page", "value": "10"},
+          {"key": "sort_by", "value": "created_at"},
+          {"key": "sort_dir", "value": "desc"}
+        ]}
+      }
+    },
+    {
+      "name": "Participants - List",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {"raw": "{{baseUrl}}/api/meetings/{{meetingId}}/participants?active=1", "host": ["{{baseUrl}}"], "path": ["api","meetings","{{meetingId}}","participants"], "query": [
+          {"key": "active", "value": "1"}
+        ]}
+      }
+    },
+    {
+      "name": "AI Notes - Generate",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {"raw": "{{baseUrl}}/api/meetings/{{meetingId}}/notes", "host": ["{{baseUrl}}"], "path": ["api","meetings","{{meetingId}}","notes"]}
+      }
+    },
+    {
+      "name": "Presence - Join",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {"raw": "{{baseUrl}}/api/meetings/{{meetingId}}/presence/join", "host": ["{{baseUrl}}"], "path": ["api","meetings","{{meetingId}}","presence","join"]}
+      }
+    },
+    {
+      "name": "Presence - Leave",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {"raw": "{{baseUrl}}/api/meetings/{{meetingId}}/presence/leave", "host": ["{{baseUrl}}"], "path": ["api","meetings","{{meetingId}}","presence","leave"]}
+      }
+    },
+    {
+      "name": "RTC - Send",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"},
+          {"key": "Authorization", "value": "Bearer {{token}}"}
+        ],
+        "url": {"raw": "{{baseUrl}}/api/meetings/{{meetingId}}/rtc/send", "host": ["{{baseUrl}}"], "path": ["api","meetings","{{meetingId}}","rtc","send"]},
+        "body": {"mode": "raw", "raw": "{\n  \"to_user_id\": 2,\n  \"type\": \"offer\",\n  \"payload\": {\n    \"sdp\": \"v=0...\"\n  }\n}"}
+      }
+    },
+    {
+      "name": "RTC - Inbox",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {"raw": "{{baseUrl}}/api/meetings/{{meetingId}}/rtc/inbox", "host": ["{{baseUrl}}"], "path": ["api","meetings","{{meetingId}}","rtc","inbox"]}
+      }
+    },
+    {
+      "name": "RTC - Ack",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"},
+          {"key": "Authorization", "value": "Bearer {{token}}"}
+        ],
+        "url": {"raw": "{{baseUrl}}/api/meetings/{{meetingId}}/rtc/ack", "host": ["{{baseUrl}}"], "path": ["api","meetings","{{meetingId}}","rtc","ack"]},
+        "body": {"mode": "raw", "raw": "{\n  \"ids\": [1]\n}"}
+      }
+    }
+  ],
+  "variable": [
+    {"key": "baseUrl", "value": "http://localhost"},
+    {"key": "token", "value": ""},
+    {"key": "meetingId", "value": "1"}
+  ]
+}
